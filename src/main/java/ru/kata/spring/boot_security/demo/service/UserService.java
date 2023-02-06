@@ -40,13 +40,13 @@ public class UserService implements UserDetailsService {
         testSet.add(testRole);
 
         userRepository.save(new User("UserTommy", "Chong"
-                , "user1", "$2a$12$M/EClJmn/C1UfPQrdLL2lu6Agi9IblOKHGKAOnPjA/lvGj4fPeWZe"
+                , "user", "$2a$12$M/EClJmn/C1UfPQrdLL2lu6Agi9IblOKHGKAOnPjA/lvGj4fPeWZe"
                 , userSet));
         userRepository.save(new User("AdminCheech", "Marin"
-                , "admin1", "$2a$12$z66K75ZA4pxARKVy5AFRNeekszW1Iy4O2OOoARjMtS.pMHq7Wrspe"
+                , "admin", "$2a$12$z66K75ZA4pxARKVy5AFRNeekszW1Iy4O2OOoARjMtS.pMHq7Wrspe"
                 , adminSet));
         userRepository.save(new User("test01", "test01"
-                , "test1", "$2a$12$PQPkhwsz1Vd/ih/wyYnkteEsJEmoxIFqp9nL/ZNDO5XEOh8GdMRnu"
+                , "test", "$2a$12$PQPkhwsz1Vd/ih/wyYnkteEsJEmoxIFqp9nL/ZNDO5XEOh8GdMRnu"
                 , testSet));
     }
 
