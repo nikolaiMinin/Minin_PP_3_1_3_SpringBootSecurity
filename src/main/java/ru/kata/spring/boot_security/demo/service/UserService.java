@@ -28,6 +28,7 @@ public class UserService implements UserDetailsService {
 
         Role userRole = new Role("ROLE_USER");
         Role adminRole = new Role("ROLE_ADMIN");
+        Role testRole = new Role("ROLE_TEST");
 
         Set<Role> userSet = new HashSet<Role>();
         Set<Role> adminSet = new HashSet<Role>();
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
 
         userSet.add(userRole);
         adminSet.add(adminRole);
-        testSet.add(userRole);
+        testSet.add(testRole);
 
         userRepository.save(new User("UserTommy", "Chong"
                 , "user1", "$2a$12$M/EClJmn/C1UfPQrdLL2lu6Agi9IblOKHGKAOnPjA/lvGj4fPeWZe"
@@ -44,8 +45,9 @@ public class UserService implements UserDetailsService {
         userRepository.save(new User("AdminCheech", "Marin"
                 , "admin1", "$2a$12$z66K75ZA4pxARKVy5AFRNeekszW1Iy4O2OOoARjMtS.pMHq7Wrspe"
                 , adminSet));
-
-//
+        userRepository.save(new User("test01", "test01"
+                , "test1", "$2a$12$PQPkhwsz1Vd/ih/wyYnkteEsJEmoxIFqp9nL/ZNDO5XEOh8GdMRnu"
+                , testSet));
     }
 
     @Override
@@ -100,6 +102,12 @@ public class UserService implements UserDetailsService {
     public void saveUser(User user) throws Exception {
         user.setRoles(user.getRoles());
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void editUser (User user) {
+        user.setRoles(user.getRoles());
         userRepository.save(user);
     }
 }

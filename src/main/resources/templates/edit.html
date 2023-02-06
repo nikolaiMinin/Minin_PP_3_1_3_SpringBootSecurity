@@ -1,10 +1,52 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit page</title>
+    <title>User update</title>
+
 </head>
 <body>
-<p>Edit page page</p>
+<form action="#" th:action="@{/admin/edit}" th:object="${user}"
+      method="post" style="max-width: 600px; margin: 0 auto;">
+    <h2>Изменение пользователя</h2>
+    <label for="id">ID</label>
+    <input readonly type="number" th:field="*{user_id}" id="id" placeholder="ID">
+    <br/>
+    <br/>
+
+    <label for="firstname">First  Name</label>
+    <input type="text" th:field="*{firstname}" id="firstname" placeholder="First Name">
+    <br/>
+    <br/>
+
+    <label for="lastname">Last  Name</label>
+    <input type="text" th:field="*{lastname}" id="lastname" placeholder="Last Name">
+    <br/>
+    <br/>
+
+    <label for="login">Login name</label>
+    <input type="text" th:field="*{username}" id="login" placeholder="Login">
+    <br/>
+    <br/>
+
+    <label for="password">Password&nbsp</label>
+    <input type="text" th:field="*{password}" id="password" placeholder="Password">
+    <br/>
+    <br/>
+
+
+    <div class="form-group row">
+        <label class="col-4 col-form-label">Roles: </label>
+        <div class="col-8">
+            <th:block th:each="role: ${listRoles}">
+                <input type="checkbox" th:field="*{roles}"
+                       th:text="${role.getRole_name()}" th:value="${role.getId()}" class="m-2" />
+            </th:block>
+        </div>
+    </div>
+    <br/>
+    <input type="submit" value="Изменить данные">
+</form>
 </body>
 </html>

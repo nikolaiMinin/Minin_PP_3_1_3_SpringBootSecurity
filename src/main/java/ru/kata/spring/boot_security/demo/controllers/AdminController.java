@@ -49,4 +49,18 @@ public class AdminController {
         userService.removeById(id);
         return "redirect:/admin";
     }
+
+    @GetMapping("/{id}/edit")
+    public String updateUserForm(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("listRoles", roleService.listRoles());
+        return "edit";
+    }
+
+    @PostMapping("/edit")
+    public String editUser(@ModelAttribute("user") User user) {
+        userService.editUser(user);
+        return "redirect:/admin";
+    }
+
 }
