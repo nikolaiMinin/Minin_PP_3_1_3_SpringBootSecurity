@@ -23,32 +23,37 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
-    @PostConstruct
-    void test() {
 
-        Role userRole = new Role("ROLE_USER");
-        Role adminRole = new Role("ROLE_ADMIN");
-        Role testRole = new Role("ROLE_TEST");
-
-        Set<Role> userSet = new HashSet<Role>();
-        Set<Role> adminSet = new HashSet<Role>();
-        Set<Role> testSet = new HashSet<Role>();
-
-
-        userSet.add(userRole);
-        adminSet.add(adminRole);
-        testSet.add(testRole);
-
-        userRepository.save(new User("UserTommy", "Chong"
-                , "user", "$2a$12$M/EClJmn/C1UfPQrdLL2lu6Agi9IblOKHGKAOnPjA/lvGj4fPeWZe"
-                , userSet));
-        userRepository.save(new User("AdminCheech", "Marin"
-                , "admin", "$2a$12$z66K75ZA4pxARKVy5AFRNeekszW1Iy4O2OOoARjMtS.pMHq7Wrspe"
-                , adminSet));
-        userRepository.save(new User("test01", "test01"
-                , "test", "$2a$12$PQPkhwsz1Vd/ih/wyYnkteEsJEmoxIFqp9nL/ZNDO5XEOh8GdMRnu"
-                , testSet));
-    }
+    @Autowired
+    RoleRepository roleRepository;
+//    @PostConstruct
+//    void test() {
+//
+//        Role userRole = new Role("ROLE_USER");
+//        Role adminRole = new Role("ROLE_ADMIN");
+//        Role testRole = new Role("ROLE_TEST");
+//
+//        Set<Role> userSet = new HashSet<Role>();
+//        Set<Role> adminSet = new HashSet<Role>();
+//        Set<Role> testSet = new HashSet<Role>();
+//
+//
+//        userSet.add(userRole);
+//        adminSet.add(adminRole);
+////        adminSet.add(userRole);
+//
+//        testSet.add(testRole);
+//
+//        userRepository.save(new User("UserTommy", "Chong"
+//                , "user", "$2a$12$M/EClJmn/C1UfPQrdLL2lu6Agi9IblOKHGKAOnPjA/lvGj4fPeWZe"
+//                , userSet));
+//        userRepository.save(new User("AdminCheech", "Marin"
+//                , "admin", "$2a$12$z66K75ZA4pxARKVy5AFRNeekszW1Iy4O2OOoARjMtS.pMHq7Wrspe"
+//                , adminSet));
+//        userRepository.save(new User("test01", "test01"
+//                , "test", "$2a$12$PQPkhwsz1Vd/ih/wyYnkteEsJEmoxIFqp9nL/ZNDO5XEOh8GdMRnu"
+//                , testSet));
+//    }
 
     @Override
     @Transactional // чтобы обойти LAZY загрузку
@@ -110,4 +115,18 @@ public class UserService implements UserDetailsService {
         user.setRoles(user.getRoles());
         userRepository.save(user);
     }
+
+    @Transactional
+    public boolean svUser(User user) {
+        Optional<User> userFromDB = userRepository.findByUsername(user.getUsername());
+
+        if (userFromDB.isPresent()) {
+            return false;
+        }
+        roleRepository.saveAll(user.getRoles());
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userRepository.saveAndFlush(user);
+        return true;
+    }
+
 }
