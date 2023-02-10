@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImp;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class dbinit {
+public class DBInit {
 
     @Autowired
-    UserService userService;
+    UserServiceImp userServiceImp;
 
     @PostConstruct
     void test() {
@@ -35,13 +34,13 @@ public class dbinit {
 
         testSet.add(testRole);
 
-        userService.svUser(new User("UserTommy", "Chong"
+        userServiceImp.svUser(new User("UserTommy", "Chong"
                 , "user", "1234"
                 , userSet));
-        userService.svUser(new User("AdminCheech", "Marin"
+        userServiceImp.svUser(new User("AdminCheech", "Marin"
                 , "admin", "100"
                 , adminSet));
-        userService.svUser(new User("test01", "test01"
+        userServiceImp.svUser(new User("test01", "test01"
                 , "test", "test"
                 , testSet));
     }
