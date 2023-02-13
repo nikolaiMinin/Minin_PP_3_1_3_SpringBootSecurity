@@ -25,34 +25,6 @@ public class UserServiceImp implements UserDetailsService, UserService {
 
     @Autowired
     RoleRepository roleRepository;
-//    @PostConstruct
-//    void test() {
-//
-//        Role userRole = new Role("ROLE_USER");
-//        Role adminRole = new Role("ROLE_ADMIN");
-//        Role testRole = new Role("ROLE_TEST");
-//
-//        Set<Role> userSet = new HashSet<Role>();
-//        Set<Role> adminSet = new HashSet<Role>();
-//        Set<Role> testSet = new HashSet<Role>();
-//
-//
-//        userSet.add(userRole);
-//        adminSet.add(adminRole);
-////        adminSet.add(userRole);
-//
-//        testSet.add(testRole);
-//
-//        userRepository.save(new User("UserTommy", "Chong"
-//                , "user", "$2a$12$M/EClJmn/C1UfPQrdLL2lu6Agi9IblOKHGKAOnPjA/lvGj4fPeWZe"
-//                , userSet));
-//        userRepository.save(new User("AdminCheech", "Marin"
-//                , "admin", "$2a$12$z66K75ZA4pxARKVy5AFRNeekszW1Iy4O2OOoARjMtS.pMHq7Wrspe"
-//                , adminSet));
-//        userRepository.save(new User("test01", "test01"
-//                , "test", "$2a$12$PQPkhwsz1Vd/ih/wyYnkteEsJEmoxIFqp9nL/ZNDO5XEOh8GdMRnu"
-//                , testSet));
-//    }
 
     @Override
     @Transactional // чтобы обойти LAZY загрузку
@@ -65,11 +37,14 @@ public class UserServiceImp implements UserDetailsService, UserService {
         return new org.springframework.security.core.userdetails
                 .User(user.getUsername(),user.getPassword(),mapRolesToAuthorities(user.getRoles()));
     }
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities( Collection<Role> roles) {
+
+    @Override
+    public Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole_name()))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public User findByUsername (String username) {
 
         Optional<User> dbuser = userRepository.findByUsername(username);
@@ -79,6 +54,7 @@ public class UserServiceImp implements UserDetailsService, UserService {
         return userRepository.findByUsername(username).get();
     }
 
+    @Override
     public User findById (Long id) {
         Optional<User> dbuser = userRepository.findById(id);
         if (dbuser.isEmpty()) {
@@ -87,6 +63,7 @@ public class UserServiceImp implements UserDetailsService, UserService {
         return dbuser.get();
     }
 
+    @Override
     public void removeById (Long id) {
         Optional<User> dbuser = userRepository.findById(id);
         if (dbuser.isEmpty()) {
@@ -98,10 +75,12 @@ public class UserServiceImp implements UserDetailsService, UserService {
         userRepository.delete(user);
     }
 
+    @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    @Override
     @Transactional
     public void saveUser(User user) throws Exception {
         user.setRoles(user.getRoles());
@@ -109,12 +88,14 @@ public class UserServiceImp implements UserDetailsService, UserService {
         userRepository.save(user);
     }
 
+    @Override
     @Transactional
     public void editUser (User user) {
         user.setRoles(user.getRoles());
         userRepository.save(user);
     }
 
+    @Override
     @Transactional
     public boolean svUser(User user) {
         Optional<User> userFromDB = userRepository.findByUsername(user.getUsername());
